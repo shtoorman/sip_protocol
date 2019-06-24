@@ -13,8 +13,8 @@ class URL(object):
         m = URL._syntax.match(value)
 
         if not m:
-            raise ValueError
-            print('Invalid URI({})'.format(value))
+            raise ValueError('Invalid URI({})' + value)
+
         self.scheme, self.user, self.password, self.host, self.port, params, headers = m.groups()
 
         if self.scheme == 'tel' and self.user is None:
@@ -25,7 +25,7 @@ class URL(object):
         self.header = [nv for nv in headers.split('&')] if headers else []
 
         splits = map(lambda n: n.partition('='), params.split(';')) if params else []
-        self.param = dict(map(lambda k: (k[0], k[2] if k[2] else None), splts)) if splits else {}
+        self.param = dict(map(lambda k: (k[0], k[2] if k[2] else None), splits)) if splits else {}
 
         if value:
             ...  # parsing code
@@ -66,3 +66,9 @@ class URL(object):
 
 
 print(URL('sip:kundan@example.net'))
+print(URL('sip:kundan:passwd@example.net:5060;transport=udp;lr?name=value&another=another'))
+print(URL('sip:192.1.2.3:5060'))
+print(URL("sip:kundan@example.net") == URL("sip:Kundan@Example.NET"))
+print('empty=', URL())
+print(URL('tel:+1-212-9397063'))
+print(URL('sip:kundan@192.1.2.3:5060').hostPort)
