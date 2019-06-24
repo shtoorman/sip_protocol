@@ -7,6 +7,7 @@ class Address(object):
                re.compile('^(?:"(?P<name>[a-zA-Z0-9\-\.\_\+\~\ \t]+)")[\ \t]*<(?P<uri>[^>]+)>'),
                re.compile('^[\ \t]*(?P<name>)(?P<uri>[^;]+)',re.DEBUG)]
 
+
     def parse(self, value):
         if str(value).startswith('*'):
             self.wildcard = True
