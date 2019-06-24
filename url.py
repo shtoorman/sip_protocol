@@ -1,7 +1,7 @@
 import re
 
 
-class URL(object):
+class URI(object):
     _syntax = re.compile('^(?P<scheme>[a-zA-Z][a-zA-Z0-9\+\-\.]*):'  # scheme
                          + '(?:(?:(?P<user>[a-zA-Z0-9\-\_\.\!\~\*\'\(\)&=\+\$,;\?\/\%]+)'  # user
                          + '(?::(?P<password>[^:@;\?]+))?)@)?'  # password
@@ -10,10 +10,10 @@ class URL(object):
                          + '(?:\?(?P<headers>.*))?$')  # headers
 
     def __init__(self, value=''):
-        m = URL._syntax.match(value)
+        m = URI._syntax.match(value)
 
         if not m:
-            raise ValueError('Invalid URI({})' + value)
+            raise ValueError('Invalid URI()' + value)
 
         self.scheme, self.user, self.password, self.host, self.port, params, headers = m.groups()
 
@@ -49,7 +49,7 @@ class URL(object):
                 (('?' + '&'.join(self.header)) if len(self.header) > 0 else '')) if self.scheme and host else ''
 
     def dup(self):
-        return URL(self.__repr__())
+        return URI(self.__repr__())
 
     @property
     def hostPort(self):
@@ -65,10 +65,10 @@ class URL(object):
     secure = property(fget=_gsecure, fset=_ssecure)
 
 
-print(URL('sip:kundan@example.net'))
-print(URL('sip:kundan:passwd@example.net:5060;transport=udp;lr?name=value&another=another'))
-print(URL('sip:192.1.2.3:5060'))
-print(URL("sip:kundan@example.net") == URL("sip:Kundan@Example.NET"))
-print('empty=', URL())
-print(URL('tel:+1-212-9397063'))
-print(URL('sip:kundan@192.1.2.3:5060').hostPort)
+print(URI('sip:shtoorman@example.net'))
+print(URI('sip:shtoorman:passwd@example.net:5060;transport=udp;lr?name=value&another=another'))
+print(URI('sip:192.1.2.3:5060'))
+print(URI("sip:shtoorman@example.net") == URI("sip:Shtoorman@Example.NET"))
+#print('empty=', URL())
+print(URI('tel:+1-212-9397063'))
+print(URI('sip:shtoorman@192.1.2.3:5060').hostPort)
