@@ -1,10 +1,11 @@
 import re
+from url import URI
 
 
 class Address(object):
     _syntax = [re.compile('^(?P<name>[a-zA-Z0-9\-\.\_\+\~\ \t]*)<(?P<uri>[^>]+)>'),
                re.compile('^(?:"(?P<name>[a-zA-Z0-9\-\.\_\+\~\ \t]+)")[\ \t]*<(?P<uri>[^>]+)>'),
-               re.compile('^[\ \t]*(?P<name>)(?P<uri>[^;]+)')]
+               re.compile('^[\ \t]*(?P<name>)(?P<uri>[^;]+)',re.DEBUG)]
 
     def parse(self, value):
         if str(value).startswith('*'):
@@ -21,9 +22,8 @@ class Address(object):
     def __init__(self, value=None):
         self.displayName = self.uri = None
         self.wildcard = self.mustQuote = False
-
-    if value:
-        self.parse(value)
+        if value:
+            self.parse(value)
 
     def __repr__(self):
         return (('"' + self.displayName + '"' + (' ' if self.uri else '')) if self.displayName else '') \
@@ -47,3 +47,4 @@ a4 = Address('<sip:shtoorman@example.net>')
 a5 = Address('sip:shtoorman@example.net')
 print(str(a1) == str(a2) and str(a1) == str(a3) and str(a1.uri) == str(a4.uri) and str(a1.uri) == str(a5.uri))
 print(a1)
+print(a1.displayable)
