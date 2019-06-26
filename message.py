@@ -11,5 +11,7 @@ class Message(object):
     def _canon(s):
         s = s.lower()
 
-    return (((len(s) == 1) and s in _short and _canon(_short[_short.index(s) - 1])) or (
-                s in _exception and _exception[s]) or '-'.join([x.capitalize() for x in s.split('-')]))
+    # a = ((len(s) == 1) and s in _short and _canon(_short[_short.index(s) - 1]))
+    # print(a)
+        return (((len(s) == 1) and s in _short and _comma(_short[_short.index(s) - 1])) or (
+            s in _exception and _exception[s]) or '-'.join([x.capitalize() for x in s.split('-')]))
