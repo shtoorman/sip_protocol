@@ -1,19 +1,20 @@
 from message import Message
 from address import Address
+from url import URI
 
 
 class Header(object):
 
     def _parse(self, value, name):
         if name in Message._address:  # address header
-            addr = Address();
+            addr = Address()
             addr.mustQuote = True
-        count = addr.parse(value)
-        value, rest = addr, value[count:]
-        if rest:
-            for n, sep, v in map(lambda x: x.partition('='), rest.split(';') if rest else []):
-                if n.strip():
-                    self.__dict__[n.lower().strip()] = v.strip()
+            count = addr.parse(value)
+            value, rest = addr, value[count:]
+            if rest:
+                for n, sep, v in map(lambda x: x.partition('='), rest.split(';') if rest else []):
+                    if n.strip():
+                        self.__dict__[n.lower().strip()] = v.strip()
         elif name not in Message._comma and name not in Message._unstructured:  # standard
             value, sep, rest = value.partition(';')
             for n, sep, v in map(lambda x: x.partition('='), rest.split(';') if rest else []):
@@ -28,10 +29,11 @@ class Header(object):
             n, sep, self.method = map(lambda x: x.strip(), value.partition(' '))
             self.number = int(n)
             value = n + ' ' + self.method
+        return value
 
     def __init__(self, value=None, name=None):
         self.name = name and Message._canon(name.strip()) or None
-        self.value = Header._parse(value.strip(), self.name and self.name.lower() or None)
+        self.value = self._parse(value.strip(), self.name and self.name.lower() or None)
 
     def __str__(self):
         name = self.name.lower()
@@ -61,20 +63,30 @@ class Header(object):
     def viaUri(self):
         if not hasattr(self, '_viaUri'):
             if self.name != 'Via':
-                raise ValueError('viaUri available only on Via header')
+                raise ValueError
 
-    proto, addr = self.value.split(' ')
-    type = proto.split('/')[2].lower()  # udp, tcp, tls
-    self._viaUri = URI('sip:' + addr + ';transport=' + type)
-    if self._viaUri.port == None: self._viaUri.port = 5060
-    if 'rport' in self:
-        try:
-            self._viaUri.port = int(self.rport)
-        except:
-            pass  # probably not an int
-    if type not in ['tcp', 'sctp', 'tls']:
-        if 'maddr' in self:
-            self._viaUri.host = self.maddr
+        proto, addr = self.value.split(' ')
+        type = proto.split('/')[2].lower()  # udp, tcp, tls
+        self._viaUri = URI('sip:' + addr + ';transport=' + type)
+        if self._viaUri.port == None:
+            self._viaUri.port = 5060
+        if 'rport' in self:
+            try:
+                self._viaUri.port = int(self.rport)
+            except:
+                pass  # probably not an int
+        if type not in ['tcp', 'sctp', 'tls']:
+            if 'maddr' in self:
+                self._viaUri.host = self.maddr
         elif 'received' in self:
             self._viaUri.host = self.received
-    return self._viaUri
+        return self._viaUri
+
+
+a = Header('SIP/2.0/UDP example.net:5090;ttl=1', 'Via')
+print(a.name)
+print(a.value)
+print(a.viaUri)
+print(Header('SIP/2.0/UDP 192.1.2.3;rport=1078;received=76.17.12.18;branch=0', 'Via').viaUri)
+
+print(Header('SIP/2.0/UDP 192.1.2.3;maddr=224.0.1.75', 'Via').viaUri)

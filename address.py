@@ -48,12 +48,12 @@ class Address(object):
             return "No"
 
 
-a1 = Address('"Aleksandr Balandin" <sip:shtoorman@example.net>')
-a2 = Address('Aleksandr Balandin <sip:shtoorman@example.net>')
-a3 = Address('"Aleksandr Balandin" <sip:kundan@example.net> ')
-a4 = Address('<sip:shtoorman@example.net>')
-a5 = Address('sip:shtoorman@example.net')
-print(str(a1) == str(a2) and str(a1) == str(a3) and str(a1.uri) == str(a4.uri) and str(a1.uri) == str(a5.uri))
-print(a1)
-print(a1.displayable)
-print("isIPv4 {} ".format(Address.isIPv4('10.2.3.4.45')))
+# a1 = Address('"Aleksandr Balandin" <sip:shtoorman@example.net>')
+# a2 = Address('Aleksandr Balandin <sip:shtoorman@example.net>')
+# a3 = Address('"Aleksandr Balandin" <sip:kundan@example.net> ')
+# a4 = Address('<sip:shtoorman@example.net>')
+# a5 = Address('sip:shtoorman@example.net')
+# print(str(a1) == str(a2) and str(a1) == str(a3) and str(a1.uri) == str(a4.uri) and str(a1.uri) == str(a5.uri))
+# print(a1)
+# print(a1.displayable)
+# print("isIPv4 {} ".format(Address.isIPv4('10.2.3.4.45')))
