@@ -82,6 +82,13 @@ class Header(object):
             self._viaUri.host = self.received
         return self._viaUri
 
+    @staticmethod
+    def createHeaders(value):
+        name, value = map(str.strip, value.split(':', 1))
+
+        return (Message._canon(name),
+                map(lambda x: Header(x, name), value.split(',') if name.lower() not in Message._comma else [value]))
+
 
 a = Header('SIP/2.0/UDP example.net:5090;ttl=1', 'Via')
 print(a.name)

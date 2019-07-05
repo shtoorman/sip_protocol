@@ -53,6 +53,14 @@ class Address(object):
 # a3 = Address('"Aleksandr Balandin" <sip:kundan@example.net> ')
 # a4 = Address('<sip:shtoorman@example.net>')
 # a5 = Address('sip:shtoorman@example.net')
+a6 = Address({'Via: SIP/2.0/UDP 100.101.102.103:5060;branch': 'z9hG4bK mp17a', 'Max-Forwards': ' 70',
+              'To': ' Ivan Ivanov <sip:ivan@domain.ru>', 'From: Petr <sip:petr@mydomain.org>;tag': '42',
+              'Call-ID': ' 4827311-391-32934', 'CSeq': ' 1 INVITE', 'Subject': ' Where are you exactly?',
+              'Contact': ' <sip:petr@myhost.mydomain.org>', 'Content-Type': ' application/sdp',
+              'Content-Length': ' 153'}
+{'v': '0', 'o ': 'Petr 2890844526 2890844526 IN IP4 100.101.102.103', 's': 'Phone Call', 't': '0 0',
+ 'c': 'IN IP4 100.101.102.103', 'm': 'audio 49170 RTP/AVP 0', 'a': 'rtpmap:0 PCMU/8000'}
+{'INVITE sip': 'bob@example.net SIP/2.0'})
 # print(str(a1) == str(a2) and str(a1) == str(a3) and str(a1.uri) == str(a4.uri) and str(a1.uri) == str(a5.uri))
 # print(a1)
 # print(a1.displayable)
