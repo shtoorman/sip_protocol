@@ -35,8 +35,15 @@ class URI(object):
             self.param = {}
             self.header = []
 
+    @staticmethod
     def cmp(a, b):
         return (a > b) - (a < b)
+
+    def __hash__(self):
+        return hash(str(self).lower())
+
+    def __cmp__(self, other):
+        return URI.cmp(str(self).lower(), str(other).lower())
 
     def __repr__(self):
         user, host = (self.user, self.host) if self.scheme != 'tel' else (None, self.user)
@@ -65,10 +72,10 @@ class URI(object):
     secure = property(fget=_gsecure, fset=_ssecure)
 
 
-print(URI('sip:shtoorman@example.net'))
-print(URI('sip:shtoorman:passwd@example.net:5060;transport=udp;lr?name=value&another=another'))
-print(URI('sip:192.1.2.3:5060'))
-print(URI("sip:shtoorman@example.net") == URI("sip:Shtoorman@Example.NET"))
-#print('empty=', URL())
-print(URI('tel:+1-212-9397063'))
-print(URI('sip:shtoorman@192.1.2.3:5060').hostPort)
+# print(URI('sip:shtoorman@example.net'))
+# print(URI('sip:shtoorman:passwd@example.net:5060;transport=udp;lr?name=value&another=another'))
+# print(URI('sip:192.1.2.3:5060'))
+# print(URI("sip:shtoorman@example.net") == URI("sip:Shtoorman@Example.NET"))
+# #print('empty=', URL())
+# print(URI('tel:+1-212-9397063'))
+# print(URI('sip:shtoorman@192.1.2.3:5060').hostPort)

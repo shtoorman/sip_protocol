@@ -1,6 +1,7 @@
 import re
 from url import URI
 import socket
+import struct
 
 
 class Address(object):
@@ -40,12 +41,21 @@ class Address(object):
         name = self.displayName or self.uri and self.uri.user or self.uri and self.uri.host or ''
         return name if len(name) < 25 else (name[0:22] + '...')
 
+    @staticmethod
     def isIPv4(data):
         try:
             m = socket.inet_aton(data)
-            return "Yes"
+            return True
         except:
-            return "No"
+            return False
+
+    @staticmethod
+    def isMulticast(data):
+        try:
+            m, = struct.unpack('>/', socket.inet_aton(data))
+            return ((m & 0xF0000000) == 0xE0000000)  # class D: 224.0.0.0/4 or first four bits as 0111
+        except:
+            return False
 
 
 # a1 = Address('"Aleksandr Balandin" <sip:shtoorman@example.net>')
@@ -58,3 +68,7 @@ class Address(object):
 # print(a1)
 # print(a1.displayable)
 # print("isIPv4 {} ".format(Address.isIPv4('10.2.3.4.45')))
+print(Address.isMulticast('224.0.1.2') is True)
+print(False is Address.isMulticast('10.2.3.4'))
+print(Address.isIPv4('10.2.3.4') is True)
+print(False is Address.isIPv4('10.2.3.a') == Address.isIPv4('10.2.3.a.5') == Address.isIPv4('10.2.3.-2') == Address.isIPv4('10.2.3.403'))

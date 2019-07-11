@@ -1,8 +1,9 @@
 import random
-import ipaddress
 from url import URI
 from header import Header
 from message import Message
+from address import Address
+
 
 
 class Stack(object):
@@ -47,7 +48,7 @@ class Stack(object):
             dest = (dest.host, dest.port or self.transport.type == 'tls' and self.transport.secure and 5061 or 5060)
         if isinstance(data, Message):
             if data.method:  # request
-                if dest and ipaddress.is_multicast(dest[0]):
+                if dest and Address.isMulticast(dest[0]):
                     data.first('Via')['maddr'], data.first('Via')['ttl'] = dest[0], 1
         elif data.response:  # response
             if not dest:
