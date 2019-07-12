@@ -9,7 +9,6 @@ from address import Address
 class Stack(object):
 
     def __init__(self, app, transport):
-
         self.tag = str(random.randint(0, 2 ** 31))
         self.app, self.transport = app, transport
         self.closing = False
@@ -40,10 +39,10 @@ class Stack(object):
             raise ValueError('Cannot find a secure transport')
         return Header('SIP/2.0/' + self.transport.type.upper() + ' ' + self.transport.host + ':' + str(
             self.transport.port) + ';rport', 'Via')
-
+######### стр 32
     def send(self, data, dest=None, transport=None):
         if dest and isinstance(dest, URI):
-            if not uri.host:
+            if not URI.host:
                 raise ValueError('No host in destination uri')
             dest = (dest.host, dest.port or self.transport.type == 'tls' and self.transport.secure and 5061 or 5060)
         if isinstance(data, Message):
